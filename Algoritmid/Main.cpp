@@ -16,7 +16,6 @@
 using namespace std;
 
 void PrintObjects(HeaderC*);
-void Printob10(Object10*);
 
 
 void PrintObjects(HeaderC* pStruct4) {
@@ -37,19 +36,80 @@ void PrintObjects(HeaderC* pStruct4) {
 	}
 }
 
+bool CheckFormat(char* newCandidate) {
+	if (newCandidate == NULL)
+		return false;
+	if (newCandidate[0] < 65)
+		return false;
+	if (newCandidate[0] > 90)
+		return false;
+}
 
-//int InsertNewObject(HeaderC** pStruct4, char* pNewID, int NewCode) {
-//
-//}
-//Object10* RemoveExistingObject(HeaderC** pStruct4, char* pExistingID) {
-//
-//}
+HeaderC* FindExistingHeader(HeaderC* pStruct4, char* pNewID) {
+	int CurrentDepth = 0;
+	while ((pStruct4 != NULL) && (CurrentDepth < N)) {
+		if (pNewID[0] == pStruct4->cBegin) {
+			return pStruct4;
+		}
+		pStruct4 = pStruct4->pNext;
+	}
+	return NULL;
+}
+
+HeaderC* CreateNewHeaderC(HeaderC* pStruct4, char* pNewID) {
+	HeaderC* newHeader = (HeaderC*)malloc(sizeof(HeaderC));
+	newHeader->cBegin = (char)malloc(sizeof(pNewID[0]));
+	newHeader->cBegin = pNewID[0];
+	return newHeader;
+}
+
+bool DoesObjectExist(HeaderC* pStruct4, char* pNewID) {
+	for (int j = 0; j < N; j++) {
+		Object10* pObjectTemp = (Object10*)pStruct4->ppObjects[j];
+		if (strcmp(pObjectTemp->pID, pNewID) == 0) {
+			return true;
+		}
+	}
+	return false;
+}
+
+void AddToExisting(HeaderC* pStruct4, char* pNewID, int newCode) {
+
+}
+
+int InsertNewObject(HeaderC** pStruct4, char* pNewID, int newCode) {
+	if (CheckFormat(pNewID) == false) {
+		printf("\nINVALID FORMAT\n");
+		return 0;
+	}
+	HeaderC* existing = FindExistingHeader(*pStruct4, pNewID);
+	if (existing == NULL) {
+		existing = CreateNewHeaderC(*pStruct4, pNewID);
+	}
+	if (DoesObjectExist(*pStruct4, pNewID)) {
+		printf("\n%s ALREADY EXISTS\n", pNewID);
+		return 0;
+	}
+	AddToExisting(*pStruct4, pNewID, newCode);
+}
 
 
 int main()
 {
 	HeaderC* pStruct4 = GetStruct4(O, N);
 	PrintObjects(pStruct4);
+
+	char newID[4] = "Bzd";
+
+	InsertNewObject(&pStruct4, newID, 10120);
+
+	PrintObjects(pStruct4);
+	/*
+	RemoveExistingObject(&pStruct4, newID);
+
+	PrintObjects(pStruct4);
+	*/
+	return 0;
 
 
 	//printf("            Test2\n");
@@ -62,3 +122,4 @@ int main()
 	//PrintObjects(pStruct4);
 	return 0;
 }
+
