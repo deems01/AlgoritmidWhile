@@ -22,28 +22,42 @@ void Printob10(Object10*);
 
 
 void PrintObjects(HeaderC* pStruct4) {
-	CurrentObject10Depth = 0;
-	if (++CurrentDepth > N)
-		return;
-	if (pStruct4 == NULL) {
-		return;
+	//CurrentObject10Depth = 0;
+	//if (++CurrentDepth > N)
+	//	return;
+	//if (pStruct4 == NULL) {
+	//	return;
+	//}
+	//printf("\n(HeaderC %d) %c", CurrentDepth, pStruct4->cBegin);
+	//Object10* pObjectTemp = (Object10*)pStruct4->ppObjects;
+	//Printob10(pObjectTemp);
+	//HeaderC* muutuja = pStruct4->pNext;
+	//PrintObjects(muutuja);
+	HeaderC* HeaderCtemp = pStruct4;
+	while ((pStruct4 != NULL) && (CurrentDepth < N)) {
+		CurrentObject10Depth = 0;
+		printf("\n(HeaderC %d) %c", CurrentDepth++, pStruct4->cBegin);
+		pStruct4 = pStruct4->pNext;
+		Object10* pObjectTemp = (Object10*)HeaderCtemp->ppObjects;
+		while ((pObjectTemp != NULL) && (CurrentObject10Depth < N)) {
+			printf("\n\t(Obj %d) %s %lu %02d %s %04d", CurrentObject10Depth++, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day,
+				pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
+			pObjectTemp = pObjectTemp->pNext;
+
+		}
 	}
-	printf("\n(HeaderC %d) %c", CurrentDepth, pStruct4->cBegin);
-	Object10* pObjectTemp = (Object10*)pStruct4->ppObjects;
-	Printob10(pObjectTemp);
-	HeaderC* muutuja = pStruct4->pNext;
-	PrintObjects(muutuja);
+
 }
-void Printob10(Object10* pObjectTemp) {
-	if (++CurrentObject10Depth > N)
-		return;
-	if (pObjectTemp == NULL) {
-		return;
-	}
-	printf("\n\t(Obj %d) %s %lu %02d %s %04d", CurrentObject10Depth, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day,
-		pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
-	Printob10(pObjectTemp->pNext);
-}
+//void Printob10(Object10* pObjectTemp) {
+//	if (++CurrentObject10Depth > N)
+//		return;
+//	if (pObjectTemp == NULL) {
+//		return;
+//	}
+//	printf("\n\t(Obj %d) %s %lu %02d %s %04d", CurrentObject10Depth, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day,
+//		pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
+//	Printob10(pObjectTemp->pNext);
+//}
 
 //int InsertNewObject(HeaderC** pStruct4, char* pNewID, int NewCode) {
 //
