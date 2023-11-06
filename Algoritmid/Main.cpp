@@ -162,19 +162,18 @@ bool DoesObjectExistOptionallyRemove(HeaderC* pStruct4, char* pNewID, bool remov
 }
 
 void setDate(Object10* newobj) {
-	//time_t rawtime = time(NULL);						//Gets current time
-	//time(&rawtime);
-	//Date3* pResult = (Date3*)malloc(sizeof(Date3));	//Allocate memory for Date3 structure
-	//char* monthBuffer = (char*)malloc(10);            //Create buffer for month pointer
-	//GetDate3(time_t RawTime, int nMonthBuf, char *pMonthBuf, Date3 *pDate3);
-	/*
-	* 	if (GetDate3(RawTime, 10, monthBuffer, pResult) == 1) //Makes date format from RawTime
+	time_t rawtime = time(NULL);						//Gets current time
+	time(&rawtime);
+	Date3* pResult = (Date3*)malloc(sizeof(Date3));	  //Allocate memory for Date3 structure
+	char* monthBuffer = (char*)malloc(10);            //Create buffer for month pointer
+	time_t RawTime = time(NULL);
+	if(GetDate3(RawTime, 10, monthBuffer, pResult) == 1) //Makes date format from RawTime
 	{
 		newobj->sDate3.Day = pResult->Day; //Write day to structure
 
 		newobj->sDate3.pMonth = strdup(pResult->pMonth); //Write month to structure
 
-		////newobj->sDate3.pMonth[sizeof(newobj->sDate3.pMonth) - 1] = '\0'; //EOF to month
+		//newobj->sDate3.pMonth[sizeof(newobj->sDate3.pMonth) - 1] = '\0'; //EOF to month
 
 		newobj->sDate3.Year = pResult->Year; //Write year to structure
 	}
@@ -183,10 +182,10 @@ void setDate(Object10* newobj) {
 		printf("Date not aquired!");
 		exit(EXIT_FAILURE);
 	}
-	*/
-	newobj->sDate3.Day = 06; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
-	newobj->sDate3.pMonth = new char[9] {'N', 'o', 'v', 'e', 'm', 'b', 'e', 'r', '\0'};
-	newobj->sDate3.Year = 2023;
+	
+	//newobj->sDate3.Day = 07; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
+	//newobj->sDate3.pMonth = new char[9] {'N', 'o', 'v', 'e', 'm', 'b', 'e', 'r', '\0'};
+	//newobj->sDate3.Year = 2023;
 	//("TODO FIX ME DATETIME");
 }
 
@@ -307,12 +306,12 @@ Object10* RemoveExistingObject(HeaderC** pStruct4, char* pNewID) {
 		return NULL;
 	}
 	if (DoesObjectExistOptionallyRemove(existing, pNewID, false) == false) {
-		printf("Objekti ei eksisteerinud");
+		printf("[%s] Objekti ei eksisteerinud", pNewID);
 		return NULL;
 	}
 	Object10* removedObject = RemoveObject(existing, pNewID);
 	HeaderC* newBeginning = RemoveHeaderifEmpty(existing, *pStruct4);
-	if (newBeginning != NULL) {   
+	if (newBeginning != NULL) {
 		*pStruct4 = newBeginning;
 	}
 	printf("\n[%s] Removing \n", pNewID);
@@ -326,12 +325,6 @@ int main()
 	HeaderC* pStruct4 = GetStruct4(O, N);
 	PrintObjects(pStruct4);
 
-	//printf("\n---------------------------------InsertNewObject------------------------\n");
-	//char newID[] = "Kz Az";
-	//int RT = InsertNewObject(&pStruct4, newID, 12345);
-	//printf("\n---RT=%d\n", RT);
-	//PrintObjects(pStruct4);
-
 	//printf("\n---------------------------------Test3------------------------\n");
 	//char newID1[20] = "Dldo Gjtls";
 	//int TT = InsertNewObject(&pStruct4, newID1, 10120);
@@ -343,17 +336,20 @@ int main()
 	const char* newIDs[] = { "Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
 	int m = sizeof(newIDs) / sizeof(newIDs[0]);
 	for (int i = 0; i < m; i++) {
-		InsertNewObject(&pStruct4, (char*)newIDs[i], 12345);
+		InsertNewObject(&pStruct4, (char*)newIDs[i], 123456789);
 		//PrintObjects(pStruct4);
 	}
 	PrintObjects(pStruct4);
 	printf("\n---------------------------------RemoveExistingObject------------------------\n");
-	
+
 	for (int i = 0; i < m; i++) {
 		RemoveExistingObject(&pStruct4, (char*)newIDs[i]);
 		//PrintObjects(pStruct4);
 	}
 	PrintObjects(pStruct4);
+	delete pStruct4->ppObjects;
+	delete pStruct4->pNext;
+	delete pStruct4;
 
 	return 0;
 }
