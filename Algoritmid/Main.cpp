@@ -17,20 +17,20 @@
 using namespace std;
 
 void PrintObjects(HeaderC*);
-bool isRegexMatch(const std::string& , const std::string& );
-bool CheckFormat(char* );
-HeaderC* FindExistingHeader(HeaderC* , char* );
-HeaderC* FindPreviousHeader(HeaderC* , char );
-HeaderC* FindNextHeader(HeaderC* , char );
-HeaderC* CreateNewHeaderC(HeaderC* , char* , bool& );
-bool DoesObjectExistOptionallyRemove(HeaderC* , char* , bool );
-void setDate(Object10* );
-void AddToExisting(HeaderC* , char* , unsigned long int );
-int InsertNewObject(HeaderC** , char* , unsigned long int );
-Object10* RemoveObject(HeaderC* , char* );
-bool CheckifHeaderEmpty(HeaderC* );
-HeaderC* RemoveHeaderifEmpty(HeaderC* , HeaderC* );
-Object10* RemoveExistingObject(HeaderC** , char* );
+bool isRegexMatch(const std::string&, const std::string&);
+bool CheckFormat(char*);
+HeaderC* FindExistingHeader(HeaderC*, char*);
+HeaderC* FindPreviousHeader(HeaderC*, char);
+HeaderC* FindNextHeader(HeaderC*, char);
+HeaderC* CreateNewHeaderC(HeaderC*, char*, bool&);
+bool DoesObjectExistOptionallyRemove(HeaderC*, char*, bool);
+void setDate(Object10*);
+void AddToExisting(HeaderC*, char*, unsigned long int);
+int InsertNewObject(HeaderC**, char*, unsigned long int);
+Object10* RemoveObject(HeaderC*, char*);
+bool CheckifHeaderEmpty(HeaderC*);
+HeaderC* RemoveHeaderifEmpty(HeaderC*, HeaderC*);
+Object10* RemoveExistingObject(HeaderC**, char*);
 
 int main()
 {
