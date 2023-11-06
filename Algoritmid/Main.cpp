@@ -46,10 +46,15 @@ bool CheckFormat(char* newCandidate) {
 		return false;
 	if (newCandidate[0] > 90)
 		return false;
+	for (int i = 1; newCandidate[i] != '\0'; i++) {
+		if (newCandidate[i] < 97)
+			return false;
+		if (newCandidate[i] > 122)
+			return false;
+	}
 }
 
 HeaderC* FindExistingHeader(HeaderC* pStruct4, char* pNewID) {
-	HeaderC* Previous;
 	while (pStruct4 != NULL) {
 		if (pNewID[0] == pStruct4->cBegin) {
 			return pStruct4;
@@ -121,10 +126,33 @@ bool DoesObjectExist(HeaderC* pStruct4, char* pNewID) {
 	}
 	return false;
 }
+
 void setDate(Object10* newobj) {
-	newobj->sDate3.Day = 11; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
-	newobj->sDate3.pMonth = new char[3] {'v', 'e', '\0'};
-	newobj->sDate3.Year = 2008;
+	//time_t rawtime = time(NULL);						//Gets current time
+	//time(&rawtime);
+	//Date3* pResult = (Date3*)malloc(sizeof(Date3));	//Allocate memory for Date3 structure
+	//char* monthBuffer = (char*)malloc(10);            //Create buffer for month pointer
+	//GetDate3(time_t RawTime, int nMonthBuf, char *pMonthBuf, Date3 *pDate3);
+	/*
+	* 	if (GetDate3(RawTime, 10, monthBuffer, pResult) == 1) //Makes date format from RawTime
+	{
+		newobj->sDate3.Day = pResult->Day; //Write day to structure
+
+		newobj->sDate3.pMonth = strdup(pResult->pMonth); //Write month to structure
+
+		////newobj->sDate3.pMonth[sizeof(newobj->sDate3.pMonth) - 1] = '\0'; //EOF to month
+
+		newobj->sDate3.Year = pResult->Year; //Write year to structure
+	}
+	else
+	{
+		printf("Date not aquired!");
+		exit(EXIT_FAILURE);
+	}
+	*/
+	newobj->sDate3.Day = 06; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
+	newobj->sDate3.pMonth = new char[9] {'N', 'o', 'v', 'e', 'm', 'b', 'e', 'r', '\0'};
+	newobj->sDate3.Year = 2023;
 	printf("TODO FIX ME");
 }
 
@@ -179,6 +207,31 @@ int InsertNewObject(HeaderC** pStruct4, char* pNewID, unsigned long int newCode)
 	return 1;
 }
 
+Object10* RemoveExistingObject(HeaderC** pStruct4, char* pNewID) {
+	if (CheckFormat(pNewID) == false) {
+		printf("\nINVALID FORMAT\n");
+		return 0;
+	}
+	HeaderC* existing = FindExistingHeader(*pStruct4, pNewID);
+	if (existing == NULL) {
+		printf("Headerit ei eksisteeri");
+		return 0;
+	}
+	if (DoesObjectExist(existing, pNewID) == false) {
+		printf("Objekti ei eksisteerinud");
+		return 0;
+		/* edasi kontrollida, mitu täidetud sloti headeris on
+		* Kui Headeris on ainult 1 täidetud slot, siis eemaldada nii see objekt kui ka header ise, asenades need NULL'iga
+		* Aga eemaldatud objekt lisada old headeri
+		* Edasi otsida FindNextHeader nii FindPreviousHeader, ning liigutada
+		* Next Headerid ühe võrra tagasi (asendades augu, mis kadus)
+		* Kui on rohkem kui 1, siis allokeerida mälu ning eemaldada konkreetne objekt antud Headerist, ning lisada see old headeri
+		* Kas eelmine objekt oskab järgmisele suvalisele objektile viidata?
+		* Kui jah siis Headeris tuleb asendada eemaldatud objekt järgmise objektiga
+		*/
+	}
+}
+
 
 int main()
 {
@@ -186,24 +239,25 @@ int main()
 	HeaderC* pStruct4 = GetStruct4(O, N);
 	PrintObjects(pStruct4);
 
-	
 
-	//printf("\n---------------------------------Test2------------------------\n");
-	// char newID[4] = "Bz";
-	//int RT = InsertNewObject(&pStruct4, newID, 10120);
-	//printf("\n---RT=%d\n", RT);
+
+	printf("\n---------------------------------Test2------------------------\n");
+	char newID[4] = "Az";
+	int RT = InsertNewObject(&pStruct4, newID, 12345);
+	printf("\n---RT=%d\n", RT);
+	PrintObjects(pStruct4);
+
+	//printf("\n---------------------------------Test3------------------------\n");
+	//char newID1[20] = "Dldo Gjtls";
+	//int TT = InsertNewObject(&pStruct4, newID1, 10120);
+	//printf("\n---TT=%d\n", TT);
 	//PrintObjects(pStruct4);
 
 	printf("\n---------------------------------Test3------------------------\n");
-	char newID1[20] = "Dldo Gjtls";
-	int TT = InsertNewObject(&pStruct4, newID1, 10120);
-	printf("\n---TT=%d\n", TT);
-	PrintObjects(pStruct4);
-	/*
-	RemoveExistingObject(&pStruct4, newID);
+	//RemoveExistingObject(&pStruct4, newID);
 
-	PrintObjects(pStruct4);
-	*/
+	//PrintObjects(pStruct4);
+
 	return 0;
 
 
