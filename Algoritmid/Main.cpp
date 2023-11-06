@@ -32,7 +32,7 @@ void PrintObjects(HeaderC* pStruct4) {
 				//	printf("%02d %s %04d", pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 				pObjectTemp = pObjectTemp->pNext;
 				if (pObjectTemp != NULL) {
-					printf("\nTODO: !!!!Linked objects not implemented, need recodeing!!!!!\n");
+					printf("\nTODO: !!!!Linked objects not implemented, need recoding!!!!!\n");
 					printf("\n\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 
 					exit(500);
@@ -165,7 +165,7 @@ void setDate(Object10* newobj) {
 	newobj->sDate3.Day = 06; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
 	newobj->sDate3.pMonth = new char[9] {'N', 'o', 'v', 'e', 'm', 'b', 'e', 'r', '\0'};
 	newobj->sDate3.Year = 2023;
-	printf("TODO FIX ME DATETIME");
+	//("TODO FIX ME DATETIME");
 }
 
 void AddToExisting(HeaderC* pStruct4, char* pNewID, unsigned long int newCode) {
@@ -270,6 +270,7 @@ HeaderC* RemoveHeaderifEmpty(HeaderC* existing, HeaderC* veryfirst) {
 		}
 		TempPrev->pNext = TempNext;
 	}
+	return NULL;
 }
 
 Object10* RemoveExistingObject(HeaderC** pStruct4, char* pNewID) {
@@ -288,9 +289,10 @@ Object10* RemoveExistingObject(HeaderC** pStruct4, char* pNewID) {
 	}
 	Object10* removedObject = RemoveObject(existing, pNewID);
 	HeaderC* newBeginning = RemoveHeaderifEmpty(existing, *pStruct4);
-	if (newBeginning != NULL) {
+	if (newBeginning != NULL) {   
 		*pStruct4 = newBeginning;
 	}
+	printf("\n[%s] Removing \n", pNewID);
 	return removedObject;
 }
 
@@ -301,10 +303,8 @@ int main()
 	HeaderC* pStruct4 = GetStruct4(O, N);
 	PrintObjects(pStruct4);
 
-
-
 	printf("\n---------------------------------InsertNewObject------------------------\n");
-	char newID[6] = "Dx Gz";
+	char newID[] = "Kz Az";
 	int RT = InsertNewObject(&pStruct4, newID, 12345);
 	printf("\n---RT=%d\n", RT);
 	PrintObjects(pStruct4);
@@ -315,10 +315,6 @@ int main()
 	//printf("\n---TT=%d\n", TT);
 	//PrintObjects(pStruct4);
 
-	printf("\n---------------------------------RemoveExistingObject------------------------\n");
-	RemoveExistingObject(&pStruct4, newID);
-	PrintObjects(pStruct4);
-
 	printf("\n---------------------------------Multiple val------------------------\n");
 	printf("Lisada antud järjekorras objektid identifikaatoritega\n");
 	const char* newIDs[] = { "Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
@@ -327,6 +323,10 @@ int main()
 		InsertNewObject(&pStruct4, (char*)newIDs[i], 12345);
 		PrintObjects(pStruct4);
 	}
+
+	printf("\n---------------------------------RemoveExistingObject------------------------\n");
+	RemoveExistingObject(&pStruct4, newID);
+	PrintObjects(pStruct4);
+
 	return 0;
 }
-
