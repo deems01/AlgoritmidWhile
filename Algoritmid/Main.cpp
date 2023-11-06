@@ -270,6 +270,7 @@ HeaderC* RemoveHeaderifEmpty(HeaderC* existing, HeaderC* veryfirst) {
 			return TempNext;
 		}
 		else {
+			TempPrev->pNext = TempNext;
 			return NULL;
 		}
 		TempPrev->pNext = TempNext;
@@ -320,13 +321,11 @@ int main()
 	printf("\n---------------------------------RemoveExistingObject------------------------\n");
 
 	for (int i = 0; i < m; i++) {
-		RemoveExistingObject(&pStruct4, (char*)newIDs[i]);
+		Object10* removed = RemoveExistingObject(&pStruct4, (char*)newIDs[i]);
+		delete removed;
 		//PrintObjects(pStruct4);
 	}
 	PrintObjects(pStruct4);
-	delete pStruct4->ppObjects;
-	delete pStruct4->pNext;
-	delete pStruct4;
 
 	return 0;
 }
