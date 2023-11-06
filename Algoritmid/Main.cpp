@@ -153,19 +153,19 @@ bool DoesObjectExistOptionallyRemove(HeaderC* pStruct4, char* pNewID, bool remov
 }
 
 void setDate(Object10* newobj) {
-	Date3* pResult = new Date3;							
-	char* monthBuffer = (char*)malloc(10);               
+	Date3* pResult = new Date3;
+	char* monthBuffer = (char*)malloc(10);
 	time_t RawTime = time(NULL);
-	if(GetDate3(RawTime, 10, monthBuffer, pResult) == 1) {
-		newobj->sDate3.Day = pResult->Day; 
-		newobj->sDate3.pMonth = strdup(pResult->pMonth); 
-		newobj->sDate3.Year = pResult->Year; 
+	if (GetDate3(RawTime, 10, monthBuffer, pResult) == 1) {
+		newobj->sDate3.Day = pResult->Day;
+		newobj->sDate3.pMonth = strdup(pResult->pMonth);
+		newobj->sDate3.Year = pResult->Year;
 	}
-	else{
+	else {
 		printf("Date not aquired!");
 		exit(EXIT_FAILURE);
 	}
-	
+
 	//newobj->sDate3.Day = 07; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
 	//newobj->sDate3.pMonth = new char[9] {'N', 'o', 'v', 'e', 'm', 'b', 'e', 'r', '\0'};
 	//newobj->sDate3.Year = 2023;
