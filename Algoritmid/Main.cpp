@@ -13,12 +13,52 @@
 
 #define O 10
 #define N 26
-#define DATESTRINGLEN 11
 
 using namespace std;
 
 void PrintObjects(HeaderC*);
+bool isRegexMatch(const std::string& , const std::string& );
+bool CheckFormat(char* );
+HeaderC* FindExistingHeader(HeaderC* , char* );
+HeaderC* FindPreviousHeader(HeaderC* , char );
+HeaderC* FindNextHeader(HeaderC* , char );
+HeaderC* CreateNewHeaderC(HeaderC* , char* , bool& );
+bool DoesObjectExistOptionallyRemove(HeaderC* , char* , bool );
+void setDate(Object10* );
+void AddToExisting(HeaderC* , char* , unsigned long int );
+int InsertNewObject(HeaderC** , char* , unsigned long int );
+Object10* RemoveObject(HeaderC* , char* );
+bool CheckifHeaderEmpty(HeaderC* );
+HeaderC* RemoveHeaderifEmpty(HeaderC* , HeaderC* );
+Object10* RemoveExistingObject(HeaderC** , char* );
 
+int main()
+{
+	printf("\n---------------------------------Printing Inital------------------------\n");
+	HeaderC* pStruct4 = GetStruct4(O, N);
+	PrintObjects(pStruct4);
+
+
+	printf("\n---------------------------------InsertNewObject------------------------\n");
+	printf("Lisada antud järjekorras objektid identifikaatoritega\n");
+	const char* newIDs[] = { "Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
+	int m = sizeof(newIDs) / sizeof(newIDs[0]);
+	for (int i = 0; i < m; i++) {
+		InsertNewObject(&pStruct4, (char*)newIDs[i], 123456789);
+		//PrintObjects(pStruct4);
+	}
+	PrintObjects(pStruct4);
+	printf("\n---------------------------------RemoveExistingObject------------------------\n");
+
+	for (int i = 0; i < m; i++) {
+		Object10* removed = RemoveExistingObject(&pStruct4, (char*)newIDs[i]);
+		delete removed;
+		//PrintObjects(pStruct4);
+	}
+	PrintObjects(pStruct4);
+
+	return 0;
+}
 
 void PrintObjects(HeaderC* pStruct4) {
 	int CurrentDepth = 0;
@@ -302,30 +342,3 @@ Object10* RemoveExistingObject(HeaderC** pStruct4, char* pNewID) {
 }
 
 
-int main()
-{
-	printf("\n---------------------------------Printing Inital------------------------\n");
-	HeaderC* pStruct4 = GetStruct4(O, N);
-	PrintObjects(pStruct4);
-
-
-	printf("\n---------------------------------InsertNewObject------------------------\n");
-	printf("Lisada antud järjekorras objektid identifikaatoritega\n");
-	const char* newIDs[] = { "Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
-	int m = sizeof(newIDs) / sizeof(newIDs[0]);
-	for (int i = 0; i < m; i++) {
-		InsertNewObject(&pStruct4, (char*)newIDs[i], 123456789);
-		//PrintObjects(pStruct4);
-	}
-	PrintObjects(pStruct4);
-	printf("\n---------------------------------RemoveExistingObject------------------------\n");
-
-	for (int i = 0; i < m; i++) {
-		Object10* removed = RemoveExistingObject(&pStruct4, (char*)newIDs[i]);
-		delete removed;
-		//PrintObjects(pStruct4);
-	}
-	PrintObjects(pStruct4);
-
-	return 0;
-}
