@@ -20,24 +20,27 @@ void PrintObjects(HeaderC*);
 
 
 void PrintObjects(HeaderC* pStruct4) {
-
 	int CurrentDepth = 0;
 	while ((pStruct4 != NULL) && (CurrentDepth < N)) {
 		printf("\n(HeaderC %d) %c", CurrentDepth++, pStruct4->cBegin);
 		for (int j = 0; j < N; j++) {
 			Object10* pObjectTemp = (Object10*)pStruct4->ppObjects[j];
-			while (pObjectTemp != 0) {
+			while (pObjectTemp != NULL) {
 				printf("\n\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 				//printf("\n\t(Obj %d) PID: %s %lu ", j, pObjectTemp->pID, pObjectTemp->Code);
 				//if (pObjectTemp->sDate3 != 0)
 				//	printf("%02d %s %04d", pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 				pObjectTemp = pObjectTemp->pNext;
+				if (pObjectTemp != NULL) {
+					printf("TODO: !!!!Linked objects not implemented, need recodeing!!!!!");
+					exit(500);
+				}
 			}
 		}
 		pStruct4 = pStruct4->pNext;
-
 	}
 }
+
 
 bool CheckFormat(char* newCandidate) {
 	if (newCandidate == NULL)
@@ -64,13 +67,13 @@ HeaderC* FindExistingHeader(HeaderC* pStruct4, char* pNewID) {
 	return NULL;
 }
 
-HeaderC* FindPreviousHeader(HeaderC* pStruct4, char* pNewID) {
+HeaderC* FindPreviousHeader(HeaderC* pStruct4, char pID) {
 	if (pStruct4 == NULL) {
 		return NULL;
 	}
 	HeaderC* Previous = NULL;
 	while (pStruct4 != NULL) {
-		if (pNewID[0] > pStruct4->cBegin) {
+		if (pID > pStruct4->cBegin) {
 			Previous = pStruct4;
 		}
 		else
@@ -80,9 +83,9 @@ HeaderC* FindPreviousHeader(HeaderC* pStruct4, char* pNewID) {
 	return Previous;
 }
 
-HeaderC* FindNextHeader(HeaderC* pStruct4, char* pNewID) {
+HeaderC* FindNextHeader(HeaderC* pStruct4, char pID) {
 	while (pStruct4 != NULL) {
-		if (pNewID[0] < pStruct4->cBegin) {
+		if (pID < pStruct4->cBegin) {
 			return pStruct4;
 		}
 		pStruct4 = pStruct4->pNext;
@@ -95,8 +98,8 @@ HeaderC* CreateNewHeaderC(HeaderC* pStruct4, char* pNewID, bool& isfirst) {
 	HeaderC* newHeader = (HeaderC*)malloc(sizeof(HeaderC));
 	newHeader->cBegin = (char)malloc(sizeof(pNewID[0]));
 	newHeader->cBegin = pNewID[0];
-	HeaderC* Prev = FindPreviousHeader(pStruct4, pNewID);
-	HeaderC* Next = FindNextHeader(pStruct4, pNewID);
+	HeaderC* Prev = FindPreviousHeader(pStruct4, pNewID[0]);
+	HeaderC* Next = FindNextHeader(pStruct4, pNewID[0]);
 	if (Prev != NULL) {
 		Prev->pNext = newHeader;
 	}
@@ -111,7 +114,7 @@ HeaderC* CreateNewHeaderC(HeaderC* pStruct4, char* pNewID, bool& isfirst) {
 	return newHeader;
 }
 
-bool DoesObjectExist(HeaderC* pStruct4, char* pNewID) {
+bool DoesObjectExistOptionallyRemove(HeaderC* pStruct4, char* pNewID, bool removeIfExists) {
 	if (pStruct4->ppObjects == NULL) {
 		return false;
 	}
@@ -121,6 +124,13 @@ bool DoesObjectExist(HeaderC* pStruct4, char* pNewID) {
 			continue;
 		}
 		if (strcmp(pObjectTemp->pID, pNewID) == 0) {
+			if (removeIfExists)
+			{
+				//delete pObjectTemp->pID;
+				//delete pObjectTemp->pNext;
+				//delete pObjectTemp;
+				pStruct4->ppObjects[j] = NULL;
+			}
 			return true;
 		}
 	}
@@ -186,6 +196,13 @@ void AddToExisting(HeaderC* pStruct4, char* pNewID, unsigned long int newCode) {
 	}
 }
 
+/// <summary>
+/// Inserts new object header and / or object
+/// </summary>
+/// <param name="pStruct4"></param>
+/// <param name="pNewID"></param>
+/// <param name="newCode"></param>
+/// <returns>1 if added, 0 if not added</returns>
 int InsertNewObject(HeaderC** pStruct4, char* pNewID, unsigned long int newCode) {
 	if (CheckFormat(pNewID) == false) {
 		printf("\nINVALID FORMAT\n");
@@ -199,7 +216,7 @@ int InsertNewObject(HeaderC** pStruct4, char* pNewID, unsigned long int newCode)
 			*pStruct4 = existing;
 		}
 	}
-	if (DoesObjectExist(existing, pNewID)) {
+	if (DoesObjectExistOptionallyRemove(existing, pNewID, false)) {
 		printf("\n%s ALREADY EXISTS\n", pNewID);
 		return 0;
 	}
@@ -207,29 +224,71 @@ int InsertNewObject(HeaderC** pStruct4, char* pNewID, unsigned long int newCode)
 	return 1;
 }
 
+/// <summary>
+/// Not in use. DoesObjectExist extra parameter does the same.
+/// </summary>
+/// <param name="existing"></param>
+/// <param name="pNewID"></param>
+Object10* RemoveObject(HeaderC* existing, char* pNewID) {
+	for (int j = 0; j < N; j++) {
+		Object10* pObjectTemp = (Object10*)existing->ppObjects[j];
+		if (pObjectTemp == NULL) {
+			continue;
+		}
+		if (strcmp(pObjectTemp->pID, pNewID) == 0) {
+			existing->ppObjects[j] = NULL;
+			return pObjectTemp;
+		}
+	}
+	return NULL;
+}
+
+bool CheckifHeaderEmpty(HeaderC* existing) {
+	for (int i = 0; i < N; i++) {
+		if ((existing->ppObjects[i]) != NULL) {
+			return false;
+		}
+	}
+	return true;
+}
+
+HeaderC* RemoveHeaderifEmpty(HeaderC* existing, HeaderC* veryfirst) {
+	if (CheckifHeaderEmpty(existing) == true) {
+		HeaderC* TempNext = existing->pNext;
+		HeaderC* TempPrev = FindPreviousHeader(veryfirst, existing->cBegin);
+		//delete existing->ppObjects;
+		//delete existing->pNext;
+		//delete existing;
+		if (TempPrev == NULL) {
+			return TempNext;
+		}
+		else {
+			return NULL;
+		}
+		TempPrev->pNext = TempNext;
+	}
+}
+
 Object10* RemoveExistingObject(HeaderC** pStruct4, char* pNewID) {
 	if (CheckFormat(pNewID) == false) {
 		printf("\nINVALID FORMAT\n");
-		return 0;
+		return NULL;
 	}
 	HeaderC* existing = FindExistingHeader(*pStruct4, pNewID);
 	if (existing == NULL) {
 		printf("Headerit ei eksisteeri");
-		return 0;
+		return NULL;
 	}
-	if (DoesObjectExist(existing, pNewID) == false) {
+	if (DoesObjectExistOptionallyRemove(existing, pNewID, false) == false) {
 		printf("Objekti ei eksisteerinud");
-		return 0;
-		/* edasi kontrollida, mitu täidetud sloti headeris on
-		* Kui Headeris on ainult 1 täidetud slot, siis eemaldada nii see objekt kui ka header ise, asenades need NULL'iga
-		* Aga eemaldatud objekt lisada old headeri
-		* Edasi otsida FindNextHeader nii FindPreviousHeader, ning liigutada
-		* Next Headerid ühe võrra tagasi (asendades augu, mis kadus)
-		* Kui on rohkem kui 1, siis allokeerida mälu ning eemaldada konkreetne objekt antud Headerist, ning lisada see old headeri
-		* Kas eelmine objekt oskab järgmisele suvalisele objektile viidata?
-		* Kui jah siis Headeris tuleb asendada eemaldatud objekt järgmise objektiga
-		*/
+		return NULL;
 	}
+	Object10* removedObject = RemoveObject(existing, pNewID);
+	HeaderC* newBeginning = RemoveHeaderifEmpty(existing, *pStruct4);
+	if (newBeginning != NULL) {
+		*pStruct4 = newBeginning;
+	}
+	return removedObject;
 }
 
 
@@ -254,9 +313,8 @@ int main()
 	//PrintObjects(pStruct4);
 
 	printf("\n---------------------------------Test3------------------------\n");
-	//RemoveExistingObject(&pStruct4, newID);
-
-	//PrintObjects(pStruct4);
+	RemoveExistingObject(&pStruct4, newID);
+	PrintObjects(pStruct4);
 
 	return 0;
 
