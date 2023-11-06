@@ -65,18 +65,19 @@ HeaderC* FindPreviousHeader(HeaderC* pStruct4, char* pNewID) {
 	}
 	HeaderC* Previous = NULL;
 	while (pStruct4 != NULL) {
-		if (pNewID[0] < pStruct4->cBegin) {
+		if (pNewID[0] > pStruct4->cBegin) {
 			Previous = pStruct4;
 		}
+		else
+			return Previous;
 		pStruct4 = pStruct4->pNext;
-		
 	}
 	return Previous;
 }
 
 HeaderC* FindNextHeader(HeaderC* pStruct4, char* pNewID) {
 	while (pStruct4 != NULL) {
-		if (pNewID[0] > pStruct4->cBegin) {
+		if (pNewID[0] < pStruct4->cBegin) {
 			return pStruct4;
 		}
 		pStruct4 = pStruct4->pNext;
@@ -84,7 +85,8 @@ HeaderC* FindNextHeader(HeaderC* pStruct4, char* pNewID) {
 	return NULL;
 }
 
-HeaderC* CreateNewHeaderC(HeaderC* pStruct4, char* pNewID) {
+HeaderC* CreateNewHeaderC(HeaderC* pStruct4, char* pNewID, bool& isfirst) {
+	isfirst = false;
 	HeaderC* newHeader = (HeaderC*)malloc(sizeof(HeaderC));
 	newHeader->cBegin = (char)malloc(sizeof(pNewID[0]));
 	newHeader->cBegin = pNewID[0];
@@ -94,7 +96,7 @@ HeaderC* CreateNewHeaderC(HeaderC* pStruct4, char* pNewID) {
 		Prev->pNext = newHeader;
 	}
 	else {
-		pStruct4 = newHeader;
+		isfirst = true;
 	}
 	newHeader->pNext = Next;
 	newHeader->ppObjects = (void**)(new Object10[N]);
@@ -111,13 +113,19 @@ bool DoesObjectExist(HeaderC* pStruct4, char* pNewID) {
 	for (int j = 0; j < N; j++) {
 		Object10* pObjectTemp = (Object10*)pStruct4->ppObjects[j];
 		if (pObjectTemp == NULL) {
-			return false;
+			continue;
 		}
 		if (strcmp(pObjectTemp->pID, pNewID) == 0) {
 			return true;
 		}
 	}
 	return false;
+}
+void setDate(Object10* newobj) {
+	newobj->sDate3.Day = 11; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
+	newobj->sDate3.pMonth = new char[3] {'v', 'e', '\0'};
+	newobj->sDate3.Year = 2008;
+	printf("TODO FIX ME");
 }
 
 void AddToExisting(HeaderC* pStruct4, char* pNewID, unsigned long int newCode) {
@@ -131,9 +139,7 @@ void AddToExisting(HeaderC* pStruct4, char* pNewID, unsigned long int newCode) {
 	//newobj->pNext = (Object10*)malloc(sizeof(newobj->pNext));
 	newobj->pNext = new Object10;//(Object10*)malloc(sizeof(newobj->pNext));
 	newobj->pNext = (Object10*)pStruct4->ppObjects[0];
-	newobj->sDate3.Day = 11; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
-	newobj->sDate3.pMonth = new char[3] {'v', 'e', '\0'};
-	newobj->sDate3.Year = 2008;
+	setDate(newobj);
 	void** old = pStruct4->ppObjects;
 	pStruct4->ppObjects = (void**)(new Object10[N]);
 	pStruct4->ppObjects[0] = newobj;
@@ -159,7 +165,11 @@ int InsertNewObject(HeaderC** pStruct4, char* pNewID, unsigned long int newCode)
 	}
 	HeaderC* existing = FindExistingHeader(*pStruct4, pNewID);
 	if (existing == NULL) {
-		existing = CreateNewHeaderC(*pStruct4, pNewID);
+		bool isfirst = false;
+		existing = CreateNewHeaderC(*pStruct4, pNewID, isfirst);
+		if (isfirst) {
+			*pStruct4 = existing;
+		}
 	}
 	if (DoesObjectExist(existing, pNewID)) {
 		printf("\n%s ALREADY EXISTS\n", pNewID);
@@ -185,7 +195,7 @@ int main()
 	//PrintObjects(pStruct4);
 
 	printf("\n---------------------------------Test3------------------------\n");
-	char newID1[4] = "Az";
+	char newID1[20] = "Dldo Gjtls";
 	int TT = InsertNewObject(&pStruct4, newID1, 10120);
 	printf("\n---TT=%d\n", TT);
 	PrintObjects(pStruct4);
