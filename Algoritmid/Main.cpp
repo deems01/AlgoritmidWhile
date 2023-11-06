@@ -8,6 +8,7 @@
 #include "Headers.h"
 #include "Structs.h"
 #include "Main.h"
+#include <regex>
 #pragma warning ( disable : 4996 )
 
 #define O 10
@@ -43,14 +44,35 @@ void PrintObjects(HeaderC* pStruct4) {
 	}
 }
 
+bool validateRegex(const std::string& regexString) {
+	try {
+		std::regex regexPattern(regexString);
+	}
+	catch (const std::regex_error& e) {
+		return false;
+	}
+	return true;
+}
+
+
+bool isRegexMatch(const std::string& text, const std::string& pattern) {
+	std::regex regexPattern(pattern);
+	return std::regex_search(text, regexPattern);
+}
 
 bool CheckFormat(char* newCandidate) {
 	if (newCandidate == NULL)
 		return false;
-	if (newCandidate[0] < 65)
+	//if (newCandidate[0] < 65)
+	//	return false;
+	//if (newCandidate[0] > 90)
+	//	return false;
+	std::string regexToValidate = "^[A-Z][a-z]+\\s[A-Z][a-z]+$";
+	std::string text = newCandidate;
+
+	if (!isRegexMatch(text, regexToValidate)) {
 		return false;
-	if (newCandidate[0] > 90)
-		return false;
+	}
 	//for (int i = 1; newCandidate[i] != '\0'; i++) {
 	//	if (newCandidate[i] < 97)
 	//		return false;
@@ -177,8 +199,9 @@ void AddToExisting(HeaderC* pStruct4, char* pNewID, unsigned long int newCode) {
 	newobj->Code = (unsigned long int)malloc(sizeof(newobj->Code));
 	newobj->Code = newCode;
 	//newobj->pNext = (Object10*)malloc(sizeof(newobj->pNext));
-	newobj->pNext = new Object10;//(Object10*)malloc(sizeof(newobj->pNext));
-	newobj->pNext = (Object10*)pStruct4->ppObjects[0];
+	//newobj->pNext = new Object10;//(Object10*)malloc(sizeof(newobj->pNext));
+	//newobj->pNext = (Object10*)pStruct4->ppObjects[0];
+	newobj->pNext = NULL;//(Object10*)malloc(sizeof(newobj->pNext));
 	setDate(newobj);
 	void** old = pStruct4->ppObjects;
 	pStruct4->ppObjects = (void**)(new Object10[N]);
@@ -275,7 +298,7 @@ HeaderC* RemoveHeaderifEmpty(HeaderC* existing, HeaderC* veryfirst) {
 
 Object10* RemoveExistingObject(HeaderC** pStruct4, char* pNewID) {
 	if (CheckFormat(pNewID) == false) {
-		printf("\nINVALID FORMAT\n");
+		printf("\n[%s] INVALID FORMAT\n", pNewID);
 		return NULL;
 	}
 	HeaderC* existing = FindExistingHeader(*pStruct4, pNewID);
@@ -303,11 +326,11 @@ int main()
 	HeaderC* pStruct4 = GetStruct4(O, N);
 	PrintObjects(pStruct4);
 
-	printf("\n---------------------------------InsertNewObject------------------------\n");
-	char newID[] = "Kz Az";
-	int RT = InsertNewObject(&pStruct4, newID, 12345);
-	printf("\n---RT=%d\n", RT);
-	PrintObjects(pStruct4);
+	//printf("\n---------------------------------InsertNewObject------------------------\n");
+	//char newID[] = "Kz Az";
+	//int RT = InsertNewObject(&pStruct4, newID, 12345);
+	//printf("\n---RT=%d\n", RT);
+	//PrintObjects(pStruct4);
 
 	//printf("\n---------------------------------Test3------------------------\n");
 	//char newID1[20] = "Dldo Gjtls";
@@ -321,11 +344,15 @@ int main()
 	int m = sizeof(newIDs) / sizeof(newIDs[0]);
 	for (int i = 0; i < m; i++) {
 		InsertNewObject(&pStruct4, (char*)newIDs[i], 12345);
-		PrintObjects(pStruct4);
+		//PrintObjects(pStruct4);
 	}
-
+	PrintObjects(pStruct4);
 	printf("\n---------------------------------RemoveExistingObject------------------------\n");
-	RemoveExistingObject(&pStruct4, newID);
+	
+	for (int i = 0; i < m; i++) {
+		RemoveExistingObject(&pStruct4, (char*)newIDs[i]);
+		//PrintObjects(pStruct4);
+	}
 	PrintObjects(pStruct4);
 
 	return 0;
