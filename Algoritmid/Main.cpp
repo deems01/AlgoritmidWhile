@@ -44,16 +44,6 @@ void PrintObjects(HeaderC* pStruct4) {
 	}
 }
 
-bool validateRegex(const std::string& regexString) {
-	try {
-		std::regex regexPattern(regexString);
-	}
-	catch (const std::regex_error& e) {
-		return false;
-	}
-	return true;
-}
-
 
 bool isRegexMatch(const std::string& text, const std::string& pattern) {
 	std::regex regexPattern(pattern);
@@ -79,6 +69,7 @@ bool CheckFormat(char* newCandidate) {
 	//	if (newCandidate[i] > 122)
 	//		return false;
 	//}
+	return true;
 }
 
 HeaderC* FindExistingHeader(HeaderC* pStruct4, char* pNewID) {
@@ -119,8 +110,8 @@ HeaderC* FindNextHeader(HeaderC* pStruct4, char pID) {
 
 HeaderC* CreateNewHeaderC(HeaderC* pStruct4, char* pNewID, bool& isfirst) {
 	isfirst = false;
-	HeaderC* newHeader = (HeaderC*)malloc(sizeof(HeaderC));
-	newHeader->cBegin = (char)malloc(sizeof(pNewID[0]));
+	HeaderC* newHeader = new HeaderC; //(HeaderC*)malloc(sizeof(HeaderC));
+	//newHeader->cBegin = (char)malloc(sizeof(pNewID[0]));
 	newHeader->cBegin = pNewID[0];
 	HeaderC* Prev = FindPreviousHeader(pStruct4, pNewID[0]);
 	HeaderC* Next = FindNextHeader(pStruct4, pNewID[0]);

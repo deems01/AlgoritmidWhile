@@ -137,9 +137,9 @@
     <ClInclude Include="Structs.h" />
   </ItemGroup>
   <ItemGroup>
-    <Object Include="x64\Debug\DateTime.obj" />
-    <Object Include="x64\Debug\Objects.obj" />
-    <Object Include="x64\Debug\Structs.obj" />
+    <Object Include="Debug\DateTime.obj" />
+    <Object Include="Debug\Objects.obj" />
+    <Object Include="Debug\Structs.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
