@@ -147,7 +147,7 @@ bool DoesObjectExistOptionallyRemove(HeaderC* pStruct4, char* pNewID, bool remov
 		if (pObjectTemp == NULL) {
 			continue;
 		}
-		if (strcmp(pObjectTemp->pID, pNewID) == 0) {
+		if (strcmp(pObjectTemp->pID, pNewID) == NULL) {
 			if (removeIfExists)
 			{
 				//delete pObjectTemp->pID;
@@ -162,23 +162,15 @@ bool DoesObjectExistOptionallyRemove(HeaderC* pStruct4, char* pNewID, bool remov
 }
 
 void setDate(Object10* newobj) {
-	time_t rawtime = time(NULL);						//Gets current time
-	time(&rawtime);
-	Date3* pResult = (Date3*)malloc(sizeof(Date3));	  //Allocate memory for Date3 structure
-	char* monthBuffer = (char*)malloc(10);            //Create buffer for month pointer
+	Date3* pResult = new Date3;							
+	char* monthBuffer = (char*)malloc(10);               
 	time_t RawTime = time(NULL);
-	if(GetDate3(RawTime, 10, monthBuffer, pResult) == 1) //Makes date format from RawTime
-	{
-		newobj->sDate3.Day = pResult->Day; //Write day to structure
-
-		newobj->sDate3.pMonth = strdup(pResult->pMonth); //Write month to structure
-
-		//newobj->sDate3.pMonth[sizeof(newobj->sDate3.pMonth) - 1] = '\0'; //EOF to month
-
-		newobj->sDate3.Year = pResult->Year; //Write year to structure
+	if(GetDate3(RawTime, 10, monthBuffer, pResult) == 1) {
+		newobj->sDate3.Day = pResult->Day; 
+		newobj->sDate3.pMonth = strdup(pResult->pMonth); 
+		newobj->sDate3.Year = pResult->Year; 
 	}
-	else
-	{
+	else{
 		printf("Date not aquired!");
 		exit(EXIT_FAILURE);
 	}
@@ -186,7 +178,6 @@ void setDate(Object10* newobj) {
 	//newobj->sDate3.Day = 07; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
 	//newobj->sDate3.pMonth = new char[9] {'N', 'o', 'v', 'e', 'm', 'b', 'e', 'r', '\0'};
 	//newobj->sDate3.Year = 2023;
-	//("TODO FIX ME DATETIME");
 }
 
 void AddToExisting(HeaderC* pStruct4, char* pNewID, unsigned long int newCode) {
@@ -325,13 +316,8 @@ int main()
 	HeaderC* pStruct4 = GetStruct4(O, N);
 	PrintObjects(pStruct4);
 
-	//printf("\n---------------------------------Test3------------------------\n");
-	//char newID1[20] = "Dldo Gjtls";
-	//int TT = InsertNewObject(&pStruct4, newID1, 10120);
-	//printf("\n---TT=%d\n", TT);
-	//PrintObjects(pStruct4);
 
-	printf("\n---------------------------------Multiple val------------------------\n");
+	printf("\n---------------------------------InsertNewObject------------------------\n");
 	printf("Lisada antud järjekorras objektid identifikaatoritega\n");
 	const char* newIDs[] = { "Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
 	int m = sizeof(newIDs) / sizeof(newIDs[0]);
