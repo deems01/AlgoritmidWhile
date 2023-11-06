@@ -132,6 +132,7 @@
   <ItemGroup>
     <ClInclude Include="DateTime.h" />
     <ClInclude Include="Headers.h" />
+    <ClInclude Include="Main.h" />
     <ClInclude Include="Objects.h" />
     <ClInclude Include="Structs.h" />
   </ItemGroup>
