@@ -32,7 +32,9 @@ void PrintObjects(HeaderC* pStruct4) {
 				//	printf("%02d %s %04d", pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 				pObjectTemp = pObjectTemp->pNext;
 				if (pObjectTemp != NULL) {
-					printf("TODO: !!!!Linked objects not implemented, need recodeing!!!!!");
+					printf("\nTODO: !!!!Linked objects not implemented, need recodeing!!!!!\n");
+					printf("\n\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
+
 					exit(500);
 				}
 			}
@@ -49,12 +51,12 @@ bool CheckFormat(char* newCandidate) {
 		return false;
 	if (newCandidate[0] > 90)
 		return false;
-	for (int i = 1; newCandidate[i] != '\0'; i++) {
-		if (newCandidate[i] < 97)
-			return false;
-		if (newCandidate[i] > 122)
-			return false;
-	}
+	//for (int i = 1; newCandidate[i] != '\0'; i++) {
+	//	if (newCandidate[i] < 97)
+	//		return false;
+	//	if (newCandidate[i] > 122)
+	//		return false;
+	//}
 }
 
 HeaderC* FindExistingHeader(HeaderC* pStruct4, char* pNewID) {
@@ -163,7 +165,7 @@ void setDate(Object10* newobj) {
 	newobj->sDate3.Day = 06; // = new Date3;//(Date3*)malloc(sizeof(newobj->sDate3));
 	newobj->sDate3.pMonth = new char[9] {'N', 'o', 'v', 'e', 'm', 'b', 'e', 'r', '\0'};
 	newobj->sDate3.Year = 2023;
-	printf("TODO FIX ME");
+	printf("TODO FIX ME DATETIME");
 }
 
 void AddToExisting(HeaderC* pStruct4, char* pNewID, unsigned long int newCode) {
@@ -205,7 +207,7 @@ void AddToExisting(HeaderC* pStruct4, char* pNewID, unsigned long int newCode) {
 /// <returns>1 if added, 0 if not added</returns>
 int InsertNewObject(HeaderC** pStruct4, char* pNewID, unsigned long int newCode) {
 	if (CheckFormat(pNewID) == false) {
-		printf("\nINVALID FORMAT\n");
+		printf("\n[%s] INVALID FORMAT\n", pNewID);
 		return 0;
 	}
 	HeaderC* existing = FindExistingHeader(*pStruct4, pNewID);
@@ -217,9 +219,10 @@ int InsertNewObject(HeaderC** pStruct4, char* pNewID, unsigned long int newCode)
 		}
 	}
 	if (DoesObjectExistOptionallyRemove(existing, pNewID, false)) {
-		printf("\n%s ALREADY EXISTS\n", pNewID);
+		printf("\n[%s] ALREADY EXISTS\n", pNewID);
 		return 0;
 	}
+	printf("[%s] Adding \n", pNewID);
 	AddToExisting(existing, pNewID, newCode);
 	return 1;
 }
@@ -294,14 +297,14 @@ Object10* RemoveExistingObject(HeaderC** pStruct4, char* pNewID) {
 
 int main()
 {
-	printf("\n---------------------------------Test1------------------------\n");
+	printf("\n---------------------------------Printing Inital------------------------\n");
 	HeaderC* pStruct4 = GetStruct4(O, N);
 	PrintObjects(pStruct4);
 
 
 
-	printf("\n---------------------------------Test2------------------------\n");
-	char newID[4] = "Az";
+	printf("\n---------------------------------InsertNewObject------------------------\n");
+	char newID[6] = "Dx Gz";
 	int RT = InsertNewObject(&pStruct4, newID, 12345);
 	printf("\n---RT=%d\n", RT);
 	PrintObjects(pStruct4);
@@ -312,21 +315,18 @@ int main()
 	//printf("\n---TT=%d\n", TT);
 	//PrintObjects(pStruct4);
 
-	printf("\n---------------------------------Test3------------------------\n");
+	printf("\n---------------------------------RemoveExistingObject------------------------\n");
 	RemoveExistingObject(&pStruct4, newID);
 	PrintObjects(pStruct4);
 
-	return 0;
-
-
-	//printf("            Test2\n");
-	// Lisada antud järjekorras objektid identifikaatoritega
-	//const char* uusID[] = { "Dx", "Db", "Dz", "Dk", "Aa", "Wu","Wa", "Zw", "Za", "wk", "Wa", "WW", "W8", "W_" };
-	//int m = sizeof(uusID) / sizeof(uusID[0]);
-	//printf("Sisestavad uued ID%d:\n\n", m);
-	//PrintObjects(pStruct4);
-	//printf("            Test3\n");
-	//PrintObjects(pStruct4);
+	printf("\n---------------------------------Multiple val------------------------\n");
+	printf("Lisada antud järjekorras objektid identifikaatoritega\n");
+	const char* newIDs[] = { "Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
+	int m = sizeof(newIDs) / sizeof(newIDs[0]);
+	for (int i = 0; i < m; i++) {
+		InsertNewObject(&pStruct4, (char*)newIDs[i], 12345);
+		PrintObjects(pStruct4);
+	}
 	return 0;
 }
 
