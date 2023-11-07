@@ -34,8 +34,9 @@ Object10* RemoveExistingObject(HeaderC**, char*);
 
 int main()
 {
+	//Var4 Ob10
 	printf("\n---------------------------------Printing Inital------------------------\n");
-	HeaderC* pStruct4 = GetStruct4(O, N);
+	HeaderC* pStruct4 = GetStruct4(O, 35);
 	PrintObjects(pStruct4);
 
 
@@ -44,7 +45,7 @@ int main()
 	const char* newIDs[] = { "Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
 	int m = sizeof(newIDs) / sizeof(newIDs[0]);
 	for (int i = 0; i < m; i++) {
-		InsertNewObject(&pStruct4, (char*)newIDs[i], 123456789);
+		InsertNewObject(&pStruct4, (char*)newIDs[i], 123456789 + i);
 		//PrintObjects(pStruct4);
 	}
 	PrintObjects(pStruct4);
@@ -72,12 +73,12 @@ void PrintObjects(HeaderC* pStruct4) {
 				//if (pObjectTemp->sDate3 != 0)
 				//	printf("%02d %s %04d", pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 				pObjectTemp = pObjectTemp->pNext;
-				if (pObjectTemp != NULL) {
-					printf("\nTODO: !!!!Linked objects not implemented, need recoding!!!!!\n");
-					printf("\n\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
+				//if (pObjectTemp != NULL) {
+				//	printf("\nTODO: !!!!Linked objects not implemented, need recoding!!!!!\n");
+				//	printf("\n\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 
-					exit(500);
-				}
+				//	exit(500);
+				//}
 			}
 		}
 		pStruct4 = pStruct4->pNext;
