@@ -42,7 +42,7 @@ int main()
 
 	printf("\n---------------------------------InsertNewObject------------------------\n");
 	printf("Lisada antud järjekorras objektid identifikaatoritega\n");
-	const char* newIDs[] = { "Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
+	const char* newIDs[] = {"Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
 	int m = sizeof(newIDs) / sizeof(newIDs[0]);
 	for (int i = 0; i < m; i++) {
 		InsertNewObject(&pStruct4, (char*)newIDs[i], 123456789 + i);
@@ -74,10 +74,10 @@ void PrintObjects(HeaderC* pStruct4) {
 				//	printf("%02d %s %04d", pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 				pObjectTemp = pObjectTemp->pNext;
 				//if (pObjectTemp != NULL) {
-				//	printf("\nTODO: !!!!Linked objects not implemented, need recoding!!!!!\n");
-				//	printf("\n\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
+				//	printf("\n\n\t!!!FOUND LINKED OBJECT!!!");
+				//	//printf("\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 
-				//	exit(500);
+				//	//exit(500);
 				//}
 			}
 		}
