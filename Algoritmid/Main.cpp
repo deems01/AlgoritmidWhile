@@ -87,10 +87,12 @@ Node* CreateBinaryTree(HeaderC* pStruct4) {
 	for (HeaderC* pStruct = pStruct4; pStruct; pStruct = pStruct->pNext) {
 		for (i = 0; i < N; i++) {
 			pObjectTemp = (Object10*)pStruct->ppObjects[i];
-			if (pObjectTemp != 0) {
+			if (pObjectTemp != NULL) {
 				for (Object10* obj = pObjectTemp; pObjectTemp; pObjectTemp = pObjectTemp->pNext) {
 					j++;
 					pTree = InsertNode(pTree, pObjectTemp);
+					//printf("\n\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
+
 				}
 			}
 		}
@@ -99,6 +101,55 @@ Node* CreateBinaryTree(HeaderC* pStruct4) {
 	printf("\nBinary tree complete\n");
 	return pTree;
 }
+
+Stack* Push(Stack* pStack, void* pRecord)
+{
+	errno = 0;
+	Stack* pNew;
+	if (!pRecord)
+	{
+		errno = EINVAL;
+		return pStack;
+	}
+	pNew = (Stack*)malloc(sizeof(Stack));
+	pNew->pObject = pRecord;
+	pNew->pNext = pStack;
+	return pNew;
+}
+
+Stack* Pop(Stack* pStack, void** pResult)
+{
+	Stack* p;
+	if (!pStack)
+	{
+		*pResult = NULL;
+		return pStack;
+	}
+	*pResult = (Object10*)pStack->pObject;
+	p = pStack->pNext;
+	free(pStack);
+	return p;
+}
+
+void TreeTraversal(Node* pTree) {
+	 printf("\n\n\n--------Printing binary tree:----------\n\n\n");
+	 int i = 1;
+	 Stack* pStack = 0;
+	 Node* p1 = pTree, * p2;
+	 if (!pTree) {
+		 return;
+	 }
+	 do {
+		 while (p1) {
+			 pStack = Push(pStack, p1);
+			 p1 = p1->pLeft;
+		 }
+		 pStack = Pop(pStack, (void**)&p2);
+		 printf("Node %-8d pID: %-12s Code: %d\n", i++, ((Object10*)p2->pObject)->pID, ((Object10*)p2->pObject)->Code);
+		 p1 = p2->pRight;
+	 } while (!(!pStack && !p1));
+}
+
 
 int main()
 {
@@ -126,7 +177,8 @@ int main()
 	}
 	PrintObjects(pStruct4);
 	printf("\n---------------------------------SecondPart------------------------\n");
-	CreateBinaryTree(pStruct4);
+	Node* pBinaryTree = CreateBinaryTree(pStruct4);
+	TreeTraversal(pBinaryTree);
 	return 0;
 }
 
