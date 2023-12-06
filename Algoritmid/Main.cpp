@@ -407,7 +407,7 @@ Node* CreateBinaryTree(HeaderC* pStruct4) {
 				for (Object10* obj = pObjectTemp; pObjectTemp; pObjectTemp = pObjectTemp->pNext) {
 					j++;
 					pTree = InsertNode(pTree, pObjectTemp);
-					//printf("\n\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
+					printf("\n\t(Obj %d) PID: %s %lu ", j, pObjectTemp->pID, pObjectTemp->Code);
 
 				}
 			}
@@ -433,6 +433,7 @@ Stack* Push(Stack* pStack, void* pRecord)
 	return pNew;
 }
 
+//Delete from Stack
 Stack* Pop(Stack* pStack, void** pResult)
 {
 	Stack* p;
@@ -447,9 +448,10 @@ Stack* Pop(Stack* pStack, void** pResult)
 	return p;
 }
 
+//fn traverses tree symmetrical, sorted output (left-root-right)
 void TreeTraversal(Node* pTree)
 {
-	printf("\n---------------------------------Printing Tree------------------------\n");
+	printf("\n---------------------------------Printing Sorted Tree------------------------\n");
 	int i = 1;
 	Stack* pStack = 0;
 	Node* p1 = pTree, * p2;
