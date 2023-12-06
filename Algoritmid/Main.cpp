@@ -31,6 +31,74 @@ Object10* RemoveObject(HeaderC*, char*);
 bool CheckifHeaderEmpty(HeaderC*);
 HeaderC* RemoveHeaderifEmpty(HeaderC*, HeaderC*);
 Object10* RemoveExistingObject(HeaderC**, char*);
+//second part
+//Node *CreateBinaryTree(HeaderC *pStruct4);
+//void TreeTraversal(Node *pTree); 
+//Node *DeleteTreeNode(Node *pTree, unsigned long int Code);
+
+//int CompareKeys(const void* pKey, const void* pRecord)
+//{
+//	return strcmp((const char*)pKey, ((const Object10*)pRecord)->pID);
+//}
+
+Node* InsertNode(Node* pTree, void* pObject) {
+	Node* pNew = (Node*)malloc(sizeof(Node));
+	if (pNew == NULL) {
+		printf("\nERROR ALLOCATING MEMORY FOR BINARY TREE NODE\n");
+	}
+	pNew->pObject = pObject;
+	pNew->pLeft = pNew->pRight = NULL;
+	if (pTree == NULL) {
+		printf("\nStarted tree\n");
+		return pNew;
+	}
+	for (Node* p = pTree; 1;) {
+		Object10* pObjectTemp = (Object10*)p->pObject;
+		if (((Object10*)pObject)->Code < pObjectTemp->Code) {
+			if (p->pLeft == NULL) {
+				p->pLeft = pNew;
+				return pTree;
+			}
+			else {
+				p = p->pLeft;
+			}
+		}
+		else {
+			if (p->pRight == NULL) {
+				p->pRight = pNew;
+				return pTree;
+			}
+			else {
+				p = p->pRight;
+			}
+		}
+	}
+	printf("\n ERROR \n");
+	return 0;
+}
+
+Node* CreateBinaryTree(HeaderC* pStruct4) {
+	Object10* pObjectTemp;
+	int i;
+	int j = 0;
+	Node* pTree = NULL;
+
+	// Loop through pStruct4 data structure
+	for (HeaderC* pStruct = pStruct4; pStruct; pStruct = pStruct->pNext) {
+		for (i = 0; i < N; i++) {
+			pObjectTemp = (Object10*)pStruct->ppObjects[i];
+			if (pObjectTemp != 0) {
+				for (Object10* obj = pObjectTemp; pObjectTemp; pObjectTemp = pObjectTemp->pNext) {
+					j++;
+					pTree = InsertNode(pTree, pObjectTemp);
+				}
+			}
+		}
+	}
+	printf("%d\n", j);
+	printf("\nBinary tree complete\n");
+	return pTree;
+}
 
 int main()
 {
@@ -57,7 +125,8 @@ int main()
 		//PrintObjects(pStruct4);
 	}
 	PrintObjects(pStruct4);
-
+	printf("\n---------------------------------SecondPart------------------------\n");
+	CreateBinaryTree(pStruct4);
 	return 0;
 }
 
