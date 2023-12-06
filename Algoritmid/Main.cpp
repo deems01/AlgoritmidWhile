@@ -32,14 +32,12 @@ bool CheckifHeaderEmpty(HeaderC*);
 HeaderC* RemoveHeaderifEmpty(HeaderC*, HeaderC*);
 Object10* RemoveExistingObject(HeaderC**, char*);
 //second part
-//Node *CreateBinaryTree(HeaderC *pStruct4);
-//void TreeTraversal(Node *pTree); 
-//Node *DeleteTreeNode(Node *pTree, unsigned long int Code);
 Node* InsertNode(Node*, void*);
 Node* CreateBinaryTree(HeaderC*);
 Stack* Push(Stack*, void*);
 Stack* Pop(Stack*, void**);
 void TreeTraversal(Node*);
+//Node *DeleteTreeNode(Node * , unsigned long int);
 //int CompareKeys(const void* , const void* );
 
 int main()
@@ -451,7 +449,7 @@ Stack* Pop(Stack* pStack, void** pResult)
 
 void TreeTraversal(Node* pTree)
 {
-	printf("\n\n\n--------Printing binary tree:----------\n\n\n");
+	printf("\n---------------------------------Printing Tree------------------------\n");
 	int i = 1;
 	Stack* pStack = 0;
 	Node* p1 = pTree, * p2;
@@ -464,7 +462,9 @@ void TreeTraversal(Node* pTree)
 			p1 = p1->pLeft;
 		}
 		pStack = Pop(pStack, (void**)&p2);
-		printf("Node %-8d pID: %-12s Code: %d\n", i++, ((Object10*)p2->pObject)->pID, ((Object10*)p2->pObject)->Code);
+		printf("\n\t(Node %d) PID: %s  %dS", i++, ((Object10*)p2->pObject)->pID, ((Object10*)p2->pObject)->Code);
 		p1 = p2->pRight;
 	} while (!(!pStack && !p1));
 }
+
+//Node *DeleteTreeNode(Node *pTree, unsigned long int Code);
