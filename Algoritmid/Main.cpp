@@ -55,7 +55,7 @@ int main()
 	const char* newIDs[] = { "Dx Gz", "Dx Ga", "Db Aa", "Dk Za", "Dr Wa", "Aa Aa", "Ab Ba", "Za Aa", "Za Ab", "Za Ba", "Wx Xa", "Wx Aa", "zb Kk", "Zc ca", "Dr Wa", "ZB kk", "Fa", "Fa_Fa" };
 	int m = sizeof(newIDs) / sizeof(newIDs[0]);
 	for (int i = 0; i < m; i++) {
-		InsertNewObject(&pStruct4, (char*)newIDs[i], 123456789 + i);
+		InsertNewObject(&pStruct4, (char*)newIDs[i], 100000000 + i);
 		//PrintObjects(pStruct4);
 	}
 	PrintObjects(pStruct4);
@@ -70,7 +70,7 @@ int main()
 	printf("\n---------------------------------SecondPart------------------------\n");
 	Node* pBinaryTree = CreateBinaryTree(pStruct4);
 	TreeTraversal(pBinaryTree);
-	pBinaryTree = DeleteTreeNode(pBinaryTree, 17355382); // root 422218 362096379 333107780 17355382
+	pBinaryTree = DeleteTreeNode(pBinaryTree, 17355382); // root 422218 362096379 333107780 17355382 316985719
 	TreeTraversal(pBinaryTree);
 	return 0;
 }
@@ -356,11 +356,6 @@ Object10* RemoveExistingObject(HeaderC** pStruct4, char* pNewID) {
 	return removedObject;
 }
 
-//int CompareKeys(const void* pKey, const void* pRecord)
-//{
-//	return strcmp((const char*)pKey, ((const Object10*)pRecord)->pID);
-//}
-
 Node* InsertNode(Node* pTree, void* pObject) {
 	Node* pNew = (Node*)malloc(sizeof(Node));
 	if (pNew == NULL) {
@@ -518,7 +513,7 @@ Node* DeleteTreeNodeOne(Node* root, Node* par, Node* ptr)
 	}
 	free(ptr);
 	return root;
-}
+} 
 
 Node* DeleteTreeNodeBoth(Node* root, Node* par, Node* ptr)
 {
