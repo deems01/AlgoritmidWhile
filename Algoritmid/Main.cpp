@@ -37,7 +37,7 @@ Node* CreateBinaryTree(HeaderC*);
 Stack* Push(Stack*, void*);
 Stack* Pop(Stack*, void**);
 void TreeTraversal(Node*);
-//Node *DeleteTreeNode(Node * , unsigned long int);
+Node* DeleteTreeNode(Node*, unsigned long int);
 //int CompareKeys(const void* , const void* );
 
 int main()
@@ -67,6 +67,8 @@ int main()
 	PrintObjects(pStruct4);
 	printf("\n---------------------------------SecondPart------------------------\n");
 	Node* pBinaryTree = CreateBinaryTree(pStruct4);
+	TreeTraversal(pBinaryTree);
+	pBinaryTree = DeleteTreeNode(pBinaryTree, 316985719); // root 422218 362096379 333107780 
 	TreeTraversal(pBinaryTree);
 	return 0;
 }
@@ -405,9 +407,9 @@ Node* CreateBinaryTree(HeaderC* pStruct4) {
 			pObjectTemp = (Object10*)pStruct->ppObjects[i];
 			if (pObjectTemp != NULL) {
 				for (Object10* obj = pObjectTemp; pObjectTemp; pObjectTemp = pObjectTemp->pNext) {
-					j++;
 					pTree = InsertNode(pTree, pObjectTemp);
 					printf("\n\t(Obj %d) PID: %s %lu ", j, pObjectTemp->pID, pObjectTemp->Code);
+					j++;
 
 				}
 			}
@@ -464,9 +466,95 @@ void TreeTraversal(Node* pTree)
 			p1 = p1->pLeft;
 		}
 		pStack = Pop(pStack, (void**)&p2);
-		printf("\n\t(Node %d) PID: %s  %dS", i++, ((Object10*)p2->pObject)->pID, ((Object10*)p2->pObject)->Code);
+		printf("\n\t(Node %d) PID: %s  %lu", i++, ((Object10*)p2->pObject)->pID, ((Object10*)p2->pObject)->Code);
 		p1 = p2->pRight;
 	} while (!(!pStack && !p1));
 }
 
-//Node *DeleteTreeNode(Node *pTree, unsigned long int Code);
+Node* DeleteTreeNode(Node* pTree, unsigned long int Code) {
+	if (pTree == NULL) {
+		printf("Tree is empty. Cannot delete node.\n");
+		return NULL;
+	}
+
+	// Leidke sõlm, mida kustutada
+	Node* currentNode = pTree;
+	Node* parentNode = NULL;
+
+	while (currentNode != NULL && ((Object10*)currentNode->pObject)->Code != Code) {
+		parentNode = currentNode;
+
+		if (Code < ((Object10*)currentNode->pObject)->Code) {
+			currentNode = currentNode->pLeft;
+		}
+		else {
+			currentNode = currentNode->pRight;
+		}
+	}
+
+	// Kui sõlme ei leitud
+	if (currentNode == NULL) {
+		printf("\nNode with code %lu not found. Cannot delete node.\n", Code);
+		return pTree;
+	}
+
+	printf("\nDeleting node with code %lu\n", Code);
+
+	// Kui sõlm on leitud, siis kustutame ta vastavalt juhtumile
+	if (currentNode->pLeft == NULL && currentNode->pRight == NULL) {
+		// Juhul 1: Sõlmel pole tütreid
+		if (parentNode == NULL) {
+			// Kui kustutatav sõlm on juur, uuendage puu juurt
+			free(currentNode);
+			return NULL;
+		}
+
+		if (parentNode->pLeft == currentNode) {
+			free(currentNode);
+			parentNode->pLeft = NULL;
+		}
+		else {
+			free(currentNode);
+			parentNode->pRight = NULL;
+		}
+	}
+	else if (currentNode->pLeft == NULL || currentNode->pRight == NULL) {
+		// Juhul 2: Sõlmel on ainult üks tütar
+		Node* childNode = (currentNode->pLeft != NULL) ? currentNode->pLeft : currentNode->pRight;
+
+		if (parentNode == NULL) {
+			// Kui kustutatav sõlm on juur, uuendage puu juurt
+			free(currentNode);
+			return childNode;
+		}
+
+		if (parentNode->pLeft == currentNode) {
+			free(currentNode);
+			parentNode->pLeft = childNode;
+		}
+		else {
+			free(currentNode);
+			parentNode->pRight = childNode;
+		}
+	}
+	else {
+		// Juhul 3: Sõlmel on mõlemad tütartipud
+		Node* successorParent = currentNode;
+		Node* successor = currentNode->pRight;
+
+		while (successor->pLeft != NULL) {
+			successorParent = successor;
+			successor = successor->pLeft;
+		}
+
+		// Kopeeri järeltulija väärtused kustutatavale sõlmele
+		((Object10*)currentNode->pObject)->Code = ((Object10*)successor->pObject)->Code;
+		free(successor);
+
+		// Kustutatava sõlme parempoolne alampuu muutub järeltulijaks
+		successorParent->pLeft = currentNode->pRight;
+		free(currentNode);
+	}
+
+	return pTree;
+}
