@@ -37,8 +37,135 @@ Node* CreateBinaryTree(HeaderC*);
 Stack* Push(Stack*, void*);
 Stack* Pop(Stack*, void**);
 void TreeTraversal(Node*);
-Node* DeleteTreeNode(Node*, unsigned long int);
+//Node* DeleteTreeNode(Node*, unsigned long int);
 //int CompareKeys(const void* , const void* );
+
+Node* DeleteTreeNodeNone(Node*, Node*, Node*);
+Node* DeleteTreeNodeOne(Node*, Node*, Node*);
+Node* DeleteTreeNodeBoth(Node*, Node*, Node*);
+Node* DeleteTreeNode(Node*, unsigned long int);
+
+Node* DeleteTreeNodeNone(Node* root, Node* par, Node* ptr)
+{
+	if (par == NULL) /*root node to be deleted*/
+	{
+		root = NULL;
+	}
+	else if (ptr == par->pLeft)
+	{
+		par->pLeft = NULL;
+	}
+	else
+	{
+		par->pRight = NULL;
+	}
+	free(ptr);
+	return root;
+}
+
+Node* DeleteTreeNodeOne(Node* root, Node* par, Node* ptr)
+{
+	Node* child;
+
+	if (ptr->pLeft != NULL) // node has left child
+	{
+		child = ptr->pLeft;
+	}
+	else                // node has right child 
+	{
+		child = ptr->pRight;
+	}
+
+	if (par == NULL)   // node is root node
+	{
+		root = child;
+	}
+	else if (ptr == par->pLeft) // node is left child of its parent
+	{
+		par->pLeft = child;
+	}
+	else                  // node is right child of its parent
+	{
+		par->pRight = child;
+	}
+	free(ptr);
+	return root;
+}
+
+Node* DeleteTreeNodeBoth(Node* root, Node* par, Node* ptr)
+{
+	Node* successor, * parentSuccessor;
+
+	// Find successor and its parent
+	parentSuccessor = ptr;
+	successor = ptr->pRight;
+	while (successor->pLeft != NULL)
+	{
+		parentSuccessor = successor;
+		successor = successor->pLeft;
+	}
+
+	ptr->pObject = successor->pObject;
+
+	if (successor->pLeft == NULL && successor->pRight == NULL)
+	{
+		root = DeleteTreeNodeNone(root, parentSuccessor, successor);
+	}
+	else
+	{
+		root = DeleteTreeNodeOne(root, parentSuccessor, successor);
+	}
+	return root;
+}
+
+Node* DeleteTreeNode(Node* pTree, unsigned long int Code)
+{
+	printf("\nDeleting %d\n", Code);
+	Node* par, * ptr;
+
+	ptr = pTree;
+	par = NULL;
+	while (ptr != NULL)
+	{
+
+		if (Code == ((Object10*)ptr->pObject)->Code)
+		{
+			break;
+		}
+		par = ptr;
+		if (Code < ((Object10*)ptr->pObject)->Code)
+		{
+			ptr = ptr->pLeft;
+		}
+		else
+		{
+			ptr = ptr->pRight;
+		}
+	}
+	if (ptr == NULL)
+	{
+		printf("Key not present in tree\n");
+	}
+	else if (ptr->pLeft != NULL && ptr->pRight != NULL) // 2 children
+	{
+		pTree = DeleteTreeNodeBoth(pTree, par, ptr);
+	}
+	else if (ptr->pLeft != NULL) // Only left child 
+	{
+		pTree = DeleteTreeNodeOne(pTree, par, ptr);
+	}
+	else if (ptr->pRight != NULL) // Only right child
+	{
+		pTree = DeleteTreeNodeOne(pTree, par, ptr);
+	}
+	else // No child
+	{
+		pTree = DeleteTreeNodeNone(pTree, par, ptr);
+	}
+
+	return pTree;
+}
+
 
 int main()
 {
@@ -68,7 +195,7 @@ int main()
 	printf("\n---------------------------------SecondPart------------------------\n");
 	Node* pBinaryTree = CreateBinaryTree(pStruct4);
 	TreeTraversal(pBinaryTree);
-	pBinaryTree = DeleteTreeNode(pBinaryTree, 12); // root 422218 362096379 333107780 17355382
+	pBinaryTree = DeleteTreeNode(pBinaryTree, 17355382); // root 422218 362096379 333107780 17355382
 	TreeTraversal(pBinaryTree);
 	return 0;
 }
@@ -471,90 +598,90 @@ void TreeTraversal(Node* pTree)
 	} while (!(!pStack && !p1));
 }
 
-Node* DeleteTreeNode(Node* pTree, unsigned long int Code) {
-	if (pTree == NULL) {
-		printf("Tree is empty. Cannot delete node.\n");
-		return NULL;
-	}
-
-	// Find node to delete
-	Node* currentNode = pTree;
-	Node* parentNode = NULL;
-
-	while (currentNode != NULL && ((Object10*)currentNode->pObject)->Code != Code) {
-		parentNode = currentNode;
-
-		if (Code < ((Object10*)currentNode->pObject)->Code) {
-			currentNode = currentNode->pLeft;
-		}
-		else {
-			currentNode = currentNode->pRight;
-		}
-	}
-
-	// if node not found
-	if (currentNode == NULL) {
-		printf("\nNode with code %lu not found. Cannot delete node.\n", Code);
-		return pTree;
-	}
-
-	printf("\nDeleting node with code %lu\n", Code);
-
-	// if node found delete depending on case
-	if (currentNode->pLeft == NULL && currentNode->pRight == NULL) {
-		// case 1: node has no children 
-		if (parentNode == NULL) {
-			// if deleted node is root , update tree root
-			free(currentNode);
-			return NULL;
-		}
-
-		if (parentNode->pLeft == currentNode) {
-			free(currentNode);
-			parentNode->pLeft = NULL;
-		}
-		else {
-			free(currentNode);
-			parentNode->pRight = NULL;
-		}
-	}
-	else if (currentNode->pLeft == NULL || currentNode->pRight == NULL) {
-		// case 2: node has only 1 child
-		Node* childNode = (currentNode->pLeft != NULL) ? currentNode->pLeft : currentNode->pRight;
-
-		if (parentNode == NULL) {
-			// if deleted node is root , update tree root
-			free(currentNode);
-			return childNode;
-		}
-
-		if (parentNode->pLeft == currentNode) {
-			free(currentNode);
-			parentNode->pLeft = childNode;
-		}
-		else {
-			free(currentNode);
-			parentNode->pRight = childNode;
-		}
-	}
-	else {
-		// case 3: node has both children
-		Node* successorParent = currentNode;
-		Node* successor = currentNode->pRight;
-
-		while (successor->pLeft != NULL) {
-			successorParent = successor;
-			successor = successor->pLeft;
-		}
-
-		// copy newcomers values to deleted node
-		((Object10*)currentNode->pObject)->Code = ((Object10*)successor->pObject)->Code;
-		free(successor);
-
-		// deleted nodes rightside tree new newcomer
-		successorParent->pLeft = currentNode->pRight;
-		free(currentNode);
-	}
-
-	return pTree;
-}
+//Node* DeleteTreeNode(Node* pTree, unsigned long int Code) {
+//	if (pTree == NULL) {
+//		printf("Tree is empty. Cannot delete node.\n");
+//		return NULL;
+//	}
+//
+//	// Find node to delete
+//	Node* currentNode = pTree;
+//	Node* parentNode = NULL;
+//
+//	while (currentNode != NULL && ((Object10*)currentNode->pObject)->Code != Code) {
+//		parentNode = currentNode;
+//
+//		if (Code < ((Object10*)currentNode->pObject)->Code) {
+//			currentNode = currentNode->pLeft;
+//		}
+//		else {
+//			currentNode = currentNode->pRight;
+//		}
+//	}
+//
+//	// if node not found
+//	if (currentNode == NULL) {
+//		printf("\nNode with code %lu not found. Cannot delete node.\n", Code);
+//		return pTree;
+//	}
+//
+//	printf("\nDeleting node with code %lu\n", Code);
+//
+//	// if node found delete depending on case
+//	if (currentNode->pLeft == NULL && currentNode->pRight == NULL) {
+//		// case 1: node has no children 
+//		if (parentNode == NULL) {
+//			// if deleted node is root , update tree root
+//			free(currentNode);
+//			return NULL;
+//		}
+//
+//		if (parentNode->pLeft == currentNode) {
+//			free(currentNode);
+//			parentNode->pLeft = NULL;
+//		}
+//		else {
+//			free(currentNode);
+//			parentNode->pRight = NULL;
+//		}
+//	}
+//	else if (currentNode->pLeft == NULL || currentNode->pRight == NULL) {
+//		// case 2: node has only 1 child
+//		Node* childNode = (currentNode->pLeft != NULL) ? currentNode->pLeft : currentNode->pRight;
+//
+//		if (parentNode == NULL) {
+//			// if deleted node is root , update tree root
+//			free(currentNode);
+//			return childNode;
+//		}
+//
+//		if (parentNode->pLeft == currentNode) {
+//			free(currentNode);
+//			parentNode->pLeft = childNode;
+//		}
+//		else {
+//			free(currentNode);
+//			parentNode->pRight = childNode;
+//		}
+//	}
+//	else {
+//		// case 3: node has both children
+//		Node* successorParent = currentNode;
+//		Node* successor = currentNode->pRight;
+//
+//		while (successor->pLeft != NULL) {
+//			successorParent = successor;
+//			successor = successor->pLeft;
+//		}
+//
+//		// copy newcomers values to deleted node
+//		((Object10*)currentNode->pObject)->Code = ((Object10*)successor->pObject)->Code;
+//		free(successor);
+//
+//		// deleted nodes rightside tree new newcomer
+//		successorParent->pLeft = currentNode->pRight;
+//		free(currentNode);
+//	}
+//
+//	return pTree;
+//}
