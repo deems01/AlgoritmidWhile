@@ -73,7 +73,7 @@ int main()
 	printf("\n---------------------------------TreeStart------------------------\n");
 	Node* pBinaryTree = CreateBinaryTree(pStruct4);
 	TreeTraversal(pBinaryTree);
-	pBinaryTree = DeleteTreeNode(pBinaryTree, 422218); // 422218 4455511 16533168 36666300 64866018 101110100 145409657 197775800 258186307 326652289
+	pBinaryTree = DeleteTreeNode(pBinaryTree, 258186307); // 422218 4455511 16533168 36666300 64866018 101110100 145409657 197775800 258186307 326652289
 	TreeTraversal(pBinaryTree);
 	printf("\n---------------------------------SecondPart 10------------------------\n");
 	pStruct4 = GetStruct4(O, 10);
@@ -419,7 +419,7 @@ Node* CreateBinaryTree(HeaderC* pStruct4) {
 				for (Object10* obj = pObjectTemp; pObjectTemp; pObjectTemp = pObjectTemp->pNext) {
 					j++;
 					pTree = InsertNode(pTree, pObjectTemp);
-					printf("\n\t(Obj %d) PID: %s %lu ", j, pObjectTemp->pID, pObjectTemp->Code);
+					printf("\n\t(Obj %d) PID: %s %lu %02d %s %04d", j, pObjectTemp->pID, pObjectTemp->Code, pObjectTemp->sDate3.Day, pObjectTemp->sDate3.pMonth, pObjectTemp->sDate3.Year);
 
 				}
 			}
@@ -476,7 +476,7 @@ void TreeTraversal(Node* pTree)
 			p1 = p1->pLeft;
 		}
 		pStack = Pop(pStack, (void**)&p2);
-		printf("\n\t(Node %d) PID: %s  %lu", i++, ((Object10*)p2->pObject)->pID, ((Object10*)p2->pObject)->Code);
+		printf("\n\t(Node %d) PID: %s  %lu %02d %s %04d", i++, ((Object10*)p2->pObject)->pID, ((Object10*)p2->pObject)->Code, ((Object10*)p2->pObject)->sDate3.Day, ((Object10*)p2->pObject)->sDate3.pMonth, ((Object10*)p2->pObject)->sDate3.Year);
 		p1 = p2->pRight;
 	} while (!(!pStack && !p1));
 }
