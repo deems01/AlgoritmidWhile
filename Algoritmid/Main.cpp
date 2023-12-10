@@ -68,10 +68,16 @@ int main()
 	}
 	PrintObjects(pStruct4);
 	printf("\n---------------------------------SecondPart------------------------\n");
+	pStruct4 = GetStruct4(O, 10);
+	PrintObjects(pStruct4);
+	printf("\n---------------------------------TreeStart------------------------\n");
 	Node* pBinaryTree = CreateBinaryTree(pStruct4);
 	TreeTraversal(pBinaryTree);
-	pBinaryTree = DeleteTreeNode(pBinaryTree, 17355382); // root 422218 362096379 333107780 17355382 316985719
+	pBinaryTree = DeleteTreeNode(pBinaryTree, 36666300); // 422218 4455511 16533168 36666300 64866018 101110100 145409657 197775800 258186307 326652289
 	TreeTraversal(pBinaryTree);
+	printf("\n\n");
+	//pBinaryTree = DeleteTreeNode(pBinaryTree, 100000000);
+	//TreeTraversal(pBinaryTree);
 	return 0;
 }
 
@@ -449,7 +455,7 @@ Stack* Pop(Stack* pStack, void** pResult)
 //fn traverses tree symmetrical, sorted output (left-root-right)
 void TreeTraversal(Node* pTree)
 {
-	printf("\n---------------------------------Printing Sorted Tree------------------------\n");
+	printf("\n---------------------------------Sorted Tree------------------------\n");
 	int i = 1;
 	Stack* pStack = 0;
 	Node* p1 = pTree;
@@ -513,7 +519,7 @@ Node* DeleteTreeNodeOne(Node* root, Node* par, Node* ptr)
 	}
 	free(ptr);
 	return root;
-} 
+}
 
 Node* DeleteTreeNodeBoth(Node* root, Node* par, Node* ptr)
 {
