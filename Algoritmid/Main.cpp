@@ -67,17 +67,25 @@ int main()
 		//PrintObjects(pStruct4);
 	}
 	PrintObjects(pStruct4);
-	printf("\n---------------------------------SecondPart------------------------\n");
-	pStruct4 = GetStruct4(O, 10);
+	printf("\n---------------------------------SecondPartO 35------------------------\n");
+	pStruct4 = GetStruct4(O, 35);
 	PrintObjects(pStruct4);
 	printf("\n---------------------------------TreeStart------------------------\n");
 	Node* pBinaryTree = CreateBinaryTree(pStruct4);
 	TreeTraversal(pBinaryTree);
-	pBinaryTree = DeleteTreeNode(pBinaryTree, 36666300); // 422218 4455511 16533168 36666300 64866018 101110100 145409657 197775800 258186307 326652289
+	pBinaryTree = DeleteTreeNode(pBinaryTree, 422218); // 422218 4455511 16533168 36666300 64866018 101110100 145409657 197775800 258186307 326652289
+	TreeTraversal(pBinaryTree);
+	printf("\n---------------------------------SecondPart 10------------------------\n");
+	pStruct4 = GetStruct4(O, 10);
+	PrintObjects(pStruct4);
+	printf("\n---------------------------------TreeStart------------------------\n");
+	pBinaryTree = CreateBinaryTree(pStruct4);
+	TreeTraversal(pBinaryTree);
+	pBinaryTree = DeleteTreeNode(pBinaryTree, 422218); // 422218 4455511 16533168 36666300 64866018 101110100 145409657 197775800 258186307 326652289
+	TreeTraversal(pBinaryTree);
+	pBinaryTree = DeleteTreeNode(pBinaryTree, 100000);
 	TreeTraversal(pBinaryTree);
 	printf("\n\n");
-	//pBinaryTree = DeleteTreeNode(pBinaryTree, 100000000);
-	//TreeTraversal(pBinaryTree);
 	return 0;
 }
 
@@ -104,7 +112,6 @@ void PrintObjects(HeaderC* pStruct4) {
 		pStruct4 = pStruct4->pNext;
 	}
 }
-
 
 bool isRegexMatch(const std::string& text, const std::string& pattern) {
 	std::regex regexPattern(pattern);
