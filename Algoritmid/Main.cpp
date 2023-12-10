@@ -425,7 +425,7 @@ Node* CreateBinaryTree(HeaderC* pStruct4) {
 			}
 		}
 	}
-	printf("\nBinary tree complete\n");
+	printf("\n\nBinary tree complete\n");
 	return pTree;
 }
 
@@ -556,7 +556,7 @@ Node* TwoChildren(Node* root, Node* par, Node* ptr)
 
 Node* DeleteTreeNode(Node* pTree, unsigned long int Code)
 {
-	printf("\nDeleting %d\n", Code);
+	printf("\n\nDeleting %d\n", Code);
 	Node* par, * ptr;
 
 	ptr = pTree;
@@ -580,7 +580,7 @@ Node* DeleteTreeNode(Node* pTree, unsigned long int Code)
 	}
 	if (ptr == NULL)
 	{
-		printf("Key not present in tree\n");
+		printf("\nKey not present in tree\n");
 	}
 	else if (ptr->pLeft != NULL && ptr->pRight != NULL) // 2 children
 	{
