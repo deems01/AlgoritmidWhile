@@ -42,9 +42,6 @@ Node* DeleteTreeNodeOne(Node*, Node*, Node*);
 Node* DeleteTreeNodeBoth(Node*, Node*, Node*);
 Node* DeleteTreeNode(Node*, unsigned long int);
 
-
-
-
 int main()
 {
 	//Var4 Ob10
