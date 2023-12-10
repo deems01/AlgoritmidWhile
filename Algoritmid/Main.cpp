@@ -73,7 +73,7 @@ int main()
 	printf("\n---------------------------------TreeStart------------------------\n");
 	Node* pBinaryTree = CreateBinaryTree(pStruct4);
 	TreeTraversal(pBinaryTree);
-	pBinaryTree = DeleteTreeNode(pBinaryTree, 258186307); // 422218 4455511 16533168 36666300 64866018 101110100 145409657 197775800 258186307 326652289
+	pBinaryTree = DeleteTreeNode(pBinaryTree, 316985719); 
 	TreeTraversal(pBinaryTree);
 	printf("\n---------------------------------SecondPart 10------------------------\n");
 	pStruct4 = GetStruct4(O, 10);
