@@ -37,9 +37,9 @@ Node* CreateBinaryTree(HeaderC*);
 Stack* Push(Stack*, void*);
 Stack* Pop(Stack*, void**);
 void TreeTraversal(Node*);
-Node* DeleteTreeNodeNone(Node*, Node*, Node*);
-Node* DeleteTreeNodeOne(Node*, Node*, Node*);
-Node* DeleteTreeNodeBoth(Node*, Node*, Node*);
+Node* NoChildren(Node*, Node*, Node*);
+Node* OneChild(Node*, Node*, Node*);
+Node* TwoChildren(Node*, Node*, Node*);
 Node* DeleteTreeNode(Node*, unsigned long int);
 
 int main()
@@ -452,7 +452,7 @@ Stack* Pop(Stack* pStack, void** pResult)
 	return p;
 }
 
-//fn traverses tree symmetrical, sorted output (left-root-right)
+//Traverse tree symmetrical, sorted output (left-root-right)
 void TreeTraversal(Node* pTree)
 {
 	printf("\n---------------------------------Sorted Tree------------------------\n");
@@ -474,7 +474,7 @@ void TreeTraversal(Node* pTree)
 	} while (!(!pStack && !p1));
 }
 
-Node* DeleteTreeNodeNone(Node* root, Node* par, Node* ptr)
+Node* NoChildren(Node* root, Node* par, Node* ptr)
 {
 	if (par == NULL) /*root node to be deleted*/
 	{
@@ -492,7 +492,7 @@ Node* DeleteTreeNodeNone(Node* root, Node* par, Node* ptr)
 	return root;
 }
 
-Node* DeleteTreeNodeOne(Node* root, Node* par, Node* ptr)
+Node* OneChild(Node* root, Node* par, Node* ptr)
 {
 	Node* child;
 
@@ -521,7 +521,7 @@ Node* DeleteTreeNodeOne(Node* root, Node* par, Node* ptr)
 	return root;
 }
 
-Node* DeleteTreeNodeBoth(Node* root, Node* par, Node* ptr)
+Node* TwoChildren(Node* root, Node* par, Node* ptr)
 {
 	Node* successor, * parentSuccessor;
 
@@ -538,11 +538,11 @@ Node* DeleteTreeNodeBoth(Node* root, Node* par, Node* ptr)
 
 	if (successor->pLeft == NULL && successor->pRight == NULL)
 	{
-		root = DeleteTreeNodeNone(root, parentSuccessor, successor);
+		root = NoChildren(root, parentSuccessor, successor);
 	}
 	else
 	{
-		root = DeleteTreeNodeOne(root, parentSuccessor, successor);
+		root = OneChild(root, parentSuccessor, successor);
 	}
 	return root;
 }
@@ -577,19 +577,19 @@ Node* DeleteTreeNode(Node* pTree, unsigned long int Code)
 	}
 	else if (ptr->pLeft != NULL && ptr->pRight != NULL) // 2 children
 	{
-		pTree = DeleteTreeNodeBoth(pTree, par, ptr);
+		pTree = TwoChildren(pTree, par, ptr);
 	}
 	else if (ptr->pLeft != NULL) // Only left child 
 	{
-		pTree = DeleteTreeNodeOne(pTree, par, ptr);
+		pTree = OneChild(pTree, par, ptr);
 	}
 	else if (ptr->pRight != NULL) // Only right child
 	{
-		pTree = DeleteTreeNodeOne(pTree, par, ptr);
+		pTree = OneChild(pTree, par, ptr);
 	}
 	else // No child
 	{
-		pTree = DeleteTreeNodeNone(pTree, par, ptr);
+		pTree = NoChildren(pTree, par, ptr);
 	}
 
 	return pTree;
